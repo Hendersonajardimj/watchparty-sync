@@ -315,12 +315,12 @@ struct MiscTests {
         r.lastAction = LastAction(by: "Casey", action: "autoResume", at: 4)
         #expect(ActionToast.toast(for: r, previous: nil, myName: "Alex") == "Everyone's ready")
         r.lastAction = LastAction(by: "Alex", action: "start", at: 5)
-        #expect(ActionToast.toast(for: r, previous: nil, myName: "Sam") == "Alex started 300 (2006)")
+        #expect(ActionToast.toast(for: r, previous: nil, myName: "Sam") == "Alex started Sample Film (2006)")
         r.lastAction = LastAction(by: "Alex", action: "pause", at: 6, connId: "c2")
         #expect(ActionToast.toast(for: r, previous: nil, myName: "Alex", myConnId: "c2") == nil)
         #expect(ActionToast.toast(for: r, previous: nil, myName: "Alex", myConnId: "c3") == "Alex paused")
         r.lastAction = LastAction(by: "", action: "ended", at: 7)
-        #expect(ActionToast.toast(for: r, previous: nil, myName: "Alex", myConnId: "c2") == "That's the end of 300 (2006)")
+        #expect(ActionToast.toast(for: r, previous: nil, myName: "Alex", myConnId: "c2") == "That's the end of Sample Film (2006)")
     }
 
     @Test func health() {
