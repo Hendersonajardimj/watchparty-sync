@@ -1,0 +1,31 @@
+name: Sync examples
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --locked --manifest-path server/Cargo.toml
+      - run: cargo run --locked --quiet --manifest-path server/Cargo.toml > room-trace.jsonl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-room-trace
+          path: room-trace.jsonl
+  swift:
+    needs: rust
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: synthetic-room-trace
+          path: .tmp
+      - run: swift test --package-path swift
+        env:
+          WATCHPARTY_TRACE: ${{ github.workspace }}/.tmp/room-trace.jsonl
+      - run: swift run --package-path swift sync-demo .tmp/room-trace.jsonl
